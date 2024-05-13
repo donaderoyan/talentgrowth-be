@@ -43,14 +43,17 @@ services:
     image: mongo:latest
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "password123"
+      MONGO_INITDB_DATABASE: "talentgrowth"
     ports:
       - 27017:27017
     volumes:
-      - mongodb-data:/data/db
+      - type: volume
+        source: mongodb-data
+        target: /data/db
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongo --host localhost --username root --password password123 --authenticationDatabase admin talentgrowth --quiet
       interval: 10s
       timeout: 10s
       retries: 5
@@ -82,8 +85,8 @@ services:
 #       interval: 10s
 #       timeout: 5s
 #       retries: 5
-# volumes:
-#   db-data:
+volumes:
+  mongodb-data:
 # secrets:
 #   db-password:
 #     file: db/password.txt

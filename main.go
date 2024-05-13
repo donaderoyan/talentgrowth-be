@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	helmet "github.com/danielkov/gin-helmet"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	config "github.com/donaderoyan/talentgrowth-be/configs"
+	route "github.com/donaderoyan/talentgrowth-be/routes"
 	util "github.com/donaderoyan/talentgrowth-be/utils"
 )
 
@@ -41,12 +41,7 @@ func SetupRouter() *gin.Engine {
 	router.Use(helmet.Default())
 	router.Use(gzip.Gzip(gzip.BestCompression))
 
-	groupRoute := router.Group("/api/v1")
-	groupRoute.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	route.InitAuthRoutes(db, router)
 
 	return router
 }
