@@ -10,6 +10,7 @@ import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 
+	config "github.com/donaderoyan/talentgrowth-be/configs"
 	util "github.com/donaderoyan/talentgrowth-be/utils"
 )
 
@@ -20,6 +21,7 @@ func main() {
 }
 
 func SetupRouter() *gin.Engine {
+	db := config.ConnectMongoDB()
 	router := gin.Default()
 
 	if util.GodotEnv("GO_ENV") != "production" && util.GodotEnv("GO_ENV") != "test" {
