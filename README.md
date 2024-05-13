@@ -36,6 +36,13 @@ Before you begin, ensure you have the following installed:
    docker compose up --build
    ```
 
+### Running the tests
+
+To run tests for the application, use the following command:
+```bash
+go test -v ./...
+```
+
 ### Running the application
 
 Once the Docker containers are up and running, the backend server should be accessible via:

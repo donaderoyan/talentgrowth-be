@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	model "github.com/donaderoyan/talentgrowth-be/models"
 	util "github.com/donaderoyan/talentgrowth-be/utils"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -41,6 +42,14 @@ func ConnectMongoDB() *mongo.Client {
 		logrus.WithFields(logrus.Fields{
 			"uri": mongoURI,
 		}).Fatal("Failed to ping MongoDB:", err)
+	}
+
+	for _, modelItem := range model.RegisterModels() {
+		db := client.Database(util.GodotEnv("MONGO_DBNAME")) // Replace 'yourDatabaseName' with your actual database name
+		collection := db.Collection(modelItem)               // Assuming ModelName is a field that holds the collection name
+		if collection == nil {
+			logrus.Fatal("Failed to get collection for model:", modelItem)
+		}
 	}
 
 	logrus.Info("Connected to MongoDB successfully")

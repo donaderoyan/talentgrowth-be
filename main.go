@@ -21,7 +21,8 @@ func main() {
 }
 
 func SetupRouter() *gin.Engine {
-	db := config.ConnectMongoDB()
+	mongo := config.ConnectMongoDB()
+	db := mongo.Database(util.GodotEnv("MONGO_DBNAME"))
 	router := gin.Default()
 
 	if util.GodotEnv("GO_ENV") != "production" && util.GodotEnv("GO_ENV") != "test" {
