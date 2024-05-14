@@ -29,6 +29,8 @@ Before you begin, ensure you have the following installed:
 
         MONGO_URI=mongodb://root:password123@mongodb:27017/?authSource=admin
         MONGO_DB=talentgrowth
+
+        JWT_SECRET="SecreteJwt"
      ```
 
 3. Build and run the Docker containers:
@@ -55,7 +57,7 @@ Before running the tests, ensure that the MongoDB server is up as the tests may 
       ```
 
    - On Windows:
-   
+
       You can use the set command before running go test:
       ```
       set MONGO_URI=mongodb://your_uri_here

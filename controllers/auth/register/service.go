@@ -1,6 +1,10 @@
 package registerController
 
-import model "github.com/donaderoyan/talentgrowth-be/models"
+import (
+	"time"
+
+	model "github.com/donaderoyan/talentgrowth-be/models"
+)
 
 type Service interface {
 	RegisterService(input *RegisterInput) (*model.User, error)
@@ -16,8 +20,12 @@ func NewRegisterService(repository Repository) *service {
 
 func (s *service) RegisterService(input *RegisterInput) (*model.User, error) {
 	user := &model.User{
-		Email:    input.Email,
-		Password: input.Password,
+		Email:     input.Email,
+		Password:  input.Password,
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	result, err := s.repository.RegisterRepository(user)
