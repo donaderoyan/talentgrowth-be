@@ -79,7 +79,7 @@ func (r *repository) LoginRepository(user *model.User) (*model.User, error) {
 func (r *repository) UpdateRememberTokenRepository(userID primitive.ObjectID, token string) error {
 	ctx := context.Background()
 	filter := bson.M{"_id": bson.M{"$eq": userID}}
-	update := bson.M{"$set": bson.M{"remember_token": token}}
+	update := bson.M{"$set": bson.M{"rememberToken": token}}
 	_, err := r.db.Collection("users").UpdateOne(ctx, filter, update)
 	if err != nil {
 		return err

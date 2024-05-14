@@ -31,11 +31,11 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 		return
 	}
 
-	// valid, err := profileController.ValidateBirthday(input.Birthday)
-	// if !valid {
-	// 	util.ErrorResponse(ctx, "Invalid birthday format", http.StatusBadRequest, http.MethodPut, err.Error())
-	// 	return
-	// }
+	valid, err := profileController.ValidateBirthday(input.Birthday)
+	if !valid {
+		util.ErrorResponse(ctx, "Invalid birthday format", http.StatusBadRequest, http.MethodPut, err.Error())
+		return
+	}
 
 	updatedUser, errUpdate := h.service.UpdateProfileService(userID, &input)
 	if errUpdate != nil {
