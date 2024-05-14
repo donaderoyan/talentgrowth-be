@@ -48,12 +48,14 @@ go test -v ./...
 Before running the tests, ensure that the MongoDB server is up as the tests may interact with MongoDB collections. To set an environment variable temporarily for the duration of the test command, use the following syntax:
 
    - On Unix-like systems (Linux, macOS):
+
       You can set the environment variable inline just before the command without affecting the global environment:
       ```
       MONGO_URI="mongodb://your_uri_here" go test -v ./...
       ```
 
    - On Windows:
+   
       You can use the set command before running go test:
       ```
       set MONGO_URI=mongodb://your_uri_here
