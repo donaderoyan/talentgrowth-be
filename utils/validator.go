@@ -26,10 +26,19 @@ func Validator(s interface{}) error {
 		// Collect all field validation errors
 		var errorMessages []string
 		for _, err := range err.(validator.ValidationErrors) {
-			if err.Param() != "" {
-				errorMessages = append(errorMessages, fmt.Sprintf("Please ensure the '%s' field meets the requirement: '%s' should be '%s'.", err.Field(), err.ActualTag(), err.Param()))
+			if err.Param() != "" || err.ActualTag() == "e164" {
+				val1 := err.ActualTag()
+				val2 := err.Param()
+				if strings.ToLower(err.Field()) == "phone" {
+					val1 = "format"
+					val2 = "a phone number in international, like +12345678900"
+				}
+				if strings.ToLower(err.ActualTag()) == "min" || strings.ToLower(err.ActualTag()) == "max" {
+					val2 = err.Param() + " characters"
+				}
+				errorMessages = append(errorMessages, fmt.Sprintf("Please ensure the %s field meets the requirement: %s should be %s.", err.Field(), val1, val2))
 			} else {
-				errorMessages = append(errorMessages, fmt.Sprintf("Please ensure the '%s' field meets the requirement: '%s'.", err.Field(), err.ActualTag()))
+				errorMessages = append(errorMessages, fmt.Sprintf("Please ensure the %s field meets the requirement: %s.", err.Field(), err.ActualTag()))
 			}
 		}
 		return fmt.Errorf(strings.Join(errorMessages, ", "))

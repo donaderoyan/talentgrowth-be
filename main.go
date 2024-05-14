@@ -43,6 +43,7 @@ func SetupRouter() *gin.Engine {
 	router.Use(gzip.Gzip(gzip.BestCompression))
 
 	route.InitAuthRoutes(db, router)
+	route.InitUserRoutes(db, router)
 
 	return router
 }

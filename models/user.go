@@ -15,6 +15,10 @@ type User struct {
 	RememberToken string             `bson:"rememberToken,omitempty"`
 	Phone         string             `bson:"phone" validate:"e164"`
 	Address       string             `bson:"address"`
+	Birthday      time.Time          `bson:"birthday,omitempty" validate:"omitempty,datetime"`
+	Gender        string             `bson:"gender,omitempty" validate:"omitempty,oneof=male female other"`
+	Nationality   string             `bson:"nationality,omitempty"`
+	Bio           string             `bson:"bio,omitempty"`
 	CreatedAt     time.Time          `bson:"createdAt"`
 	UpdatedAt     time.Time          `bson:"updatedAt"`
 	DeletedAt     *time.Time         `bson:"deletedAt,omitempty"`
