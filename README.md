@@ -43,6 +43,34 @@ To run tests for the application, use the following command:
 go test -v ./...
 ```
 
+### Setting Environment Variables for Testing
+
+Before running the tests, ensure that the MongoDB server is up as the tests may interact with MongoDB collections.
+
+#### Setting Environment Variables Temporarily
+
+To set an environment variable temporarily for the duration of the test command, use the following syntax:
+
+**On Unix-like systems (Linux, macOS):**
+You can set the environment variable inline just before the command without affecting the global environment:
+```
+MONGO_URI="mongodb://your_uri_here" go test -v ./...
+```
+**On Windows:**
+You can use the set command before running go test:
+```
+set MONGO_URI=mongodb://your_uri_here
+go test -v ./...
+```
+
+Alternatively, for a one-liner in Windows PowerShell:
+```
+$env:MONGO_URI="mongodb://your_uri_here"; go test -v ./...
+```
+
+These commands set the environment variable temporarily for the duration of the test command. If you need the variable to persist, you would set it in your shell's configuration file or Windows environment settings.
+
+
 ### Running the application
 
 Once the Docker containers are up and running, the backend server should be accessible via:

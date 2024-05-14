@@ -26,7 +26,11 @@ func Validator(s interface{}) error {
 		// Collect all field validation errors
 		var errorMessages []string
 		for _, err := range err.(validator.ValidationErrors) {
-			errorMessages = append(errorMessages, fmt.Sprintf("The field '%s' is invalid: it must satisfy the condition '%s'.", err.Field(), err.ActualTag()))
+			if err.Param() != "" {
+				errorMessages = append(errorMessages, fmt.Sprintf("Please ensure the '%s' field meets the requirement: '%s' should be '%s'.", err.Field(), err.ActualTag(), err.Param()))
+			} else {
+				errorMessages = append(errorMessages, fmt.Sprintf("Please ensure the '%s' field meets the requirement: '%s'.", err.Field(), err.ActualTag()))
+			}
 		}
 		return fmt.Errorf(strings.Join(errorMessages, ", "))
 	}
