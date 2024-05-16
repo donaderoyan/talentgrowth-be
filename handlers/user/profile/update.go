@@ -17,6 +17,18 @@ func NewHandlerProfile(service profileController.Service) *handler {
 	return &handler{service: service}
 }
 
+// Swagger documentation for UpdateProfileHandler
+// @Summary Update user profile
+// @Description Update the profile of a user by their ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Param profile body profileController.UpdateProfileInput true "Update Profile Data"
+// @Success 200 {object} map[string]interface{} "Profile updated successfully"
+// @Failure 400 {object} map[string]interface{} "Bad request"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/v1/user/profile/{id} [put]
 func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 	userID := ctx.Param("id") // Assuming 'id' is passed as a URL parameter
 	var input profileController.UpdateProfileInput

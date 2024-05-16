@@ -74,4 +74,13 @@ These commands set the environment variable temporarily for the duration of the 
 
 ### Running the application
 
-Once the Docker containers are up and running, the backend server should be accessible via:
+Once the Docker containers are up and running, the backend server should be accessible via http://localhost:7890. You can check the API documentation at:
+``` 
+http://localhost:7890/api/v1/documentation/index.html 
+```
+
+To generate updated API documentation after making changes, run the following command in your terminal:
+```
+swag init
+```
+

@@ -17,6 +17,18 @@ func NewHandlerRegister(service registerController.Service) *handler {
 	return &handler{service: service}
 }
 
+// Swagger documentation for Register API
+// @Summary Register new user
+// @Description Register a new user with email, password, first name, and last name
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param register body registerController.RegisterInput true "Register Input"
+// @Success 200 {object} map[string]interface{} "User registered successfully"
+// @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
+// @Failure 409 {object} map[string]interface{} "Conflict, user already exists"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/v1/register [post]
 func (h *handler) RegisterHandler(ctx *gin.Context) {
 	var input registerController.RegisterInput
 

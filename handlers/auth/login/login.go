@@ -16,6 +16,18 @@ func NewHandlerLogin(service loginController.Service) *handler {
 	return &handler{service: service}
 }
 
+// Swagger documentation for LoginHandler
+// @Summary User login
+// @Description Logs in a user by email and password
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param login body loginController.LoginInput true "Login Credentials"
+// @Success 200 {object} map[string]interface{} "Login successful, returns access token"
+// @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
+// @Failure 404 {object} map[string]interface{} "User not found"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /api/v1/login [post]
 func (h *handler) LoginHandler(ctx *gin.Context) {
 	var input loginController.LoginInput
 

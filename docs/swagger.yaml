@@ -1,0 +1,184 @@
+definitions:
+  loginController.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  profileController.UpdateProfileInput:
+    properties:
+      address:
+        type: string
+      bio:
+        type: string
+      birthday:
+        type: string
+      firstName:
+        type: string
+      gender:
+        enum:
+        - male
+        - female
+        - other
+        type: string
+      lastName:
+        type: string
+      nationality:
+        type: string
+      phone:
+        type: string
+    required:
+    - firstName
+    - lastName
+    - phone
+    type: object
+  registerController.RegisterInput:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
+    type: object
+info:
+  contact:
+    email: donaderoyan@gmail.com
+    name: API Support
+  description: This is the API documentation for Talentgrowth
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Talentgrowth API
+  version: "1.0"
+paths:
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in a user by email and password
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/loginController.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, returns access token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request, invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User login
+      tags:
+      - Authentication
+  /api/v1/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with email, password, first name, and last
+        name
+      parameters:
+      - description: Register Input
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/registerController.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User registered successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request, invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict, user already exists
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register new user
+      tags:
+      - Authentication
+  /api/v1/user/profile/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update the profile of a user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Profile Data
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/profileController.UpdateProfileInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update user profile
+      tags:
+      - User
+swagger: "2.0"
