@@ -24,7 +24,6 @@ definitions:
         enum:
         - male
         - female
-        - other
         type: string
       lastName:
         type: string

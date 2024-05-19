@@ -55,7 +55,7 @@ func SetupRouter() *gin.Engine {
 	router.Use(helmet.Default())
 	router.Use(gzip.Gzip(gzip.BestCompression))
 
-	router.GET("/api/v1/documentation/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	route.InitAuthRoutes(db, router)
 	route.InitUserRoutes(db, router)
