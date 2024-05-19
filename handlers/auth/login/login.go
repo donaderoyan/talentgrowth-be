@@ -75,8 +75,17 @@ func (h *handler) LoginHandler(ctx *gin.Context) {
 			return
 		}
 
+		responseData := map[string]interface{}{
+			"id":        resultLogin.ID,
+			"email":     resultLogin.Email,
+			"firstName": resultLogin.FirstName,
+			"lastName":  resultLogin.LastName,
+			// "role": resultLogin.Role,
+		}
+
 		util.APIResponse(ctx, "Login successful", http.StatusOK, http.MethodPost, map[string]interface{}{
 			"accessToken": accessToken,
+			"user":        responseData,
 		})
 	}
 

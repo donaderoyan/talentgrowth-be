@@ -233,8 +233,7 @@ const docTemplate = `{
                     "type": "string",
                     "enum": [
                         "male",
-                        "female",
-                        "other"
+                        "female"
                     ]
                 },
                 "lastName": {
