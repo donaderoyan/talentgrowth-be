@@ -28,7 +28,7 @@ func main() {
 // @version 1.0
 // @description This is the API documentation for Talentgrowth
 // @termsOfService http://swagger.io/terms/
-// @contact.name API Support
+// @contact.name API Support - Donaderoyan
 // @contact.email donaderoyan@gmail.com
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
@@ -55,7 +55,7 @@ func SetupRouter() *gin.Engine {
 	router.Use(helmet.Default())
 	router.Use(gzip.Gzip(gzip.BestCompression))
 
-	router.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.DefaultModelsExpandDepth(-1)))
 
 	route.InitAuthRoutes(db, router)
 	route.InitUserRoutes(db, router)
