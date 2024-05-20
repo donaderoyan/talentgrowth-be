@@ -52,7 +52,7 @@ func (h *handler) LoginHandler(ctx *gin.Context) {
 			return
 		default:
 			// Handle other unexpected errors
-			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPost, nil)
+			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPost, errLogin.Error())
 			return
 		}
 	} else {

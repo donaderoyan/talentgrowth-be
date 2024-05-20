@@ -76,11 +76,47 @@ These commands set the environment variable temporarily for the duration of the 
 
 Once the Docker containers are up and running, the backend server should be accessible via http://localhost:7890. You can check the API documentation at:
 ``` 
-http://localhost:7890/api/v1/documentation/index.html 
+http://localhost:7890/api/v1/docs/index.html 
 ```
 
 To generate updated API documentation after making changes, run the following command in your terminal:
 ```
 swag init
 ```
+
+### Data Migration Documentation
+
+#### Overview
+Data migration is a critical process that involves transferring data between storage types, formats, or systems. In the context of our application, we often need to migrate user data within our MongoDB database to ensure that all documents conform to updated schema requirements.
+
+#### Migration Process
+To perform a data migration, follow these steps:
+
+1. **Prepare Migration Script**: Before updating the migration script, confirm that the MongoDB server is up. Ensure that the migration script includes all necessary fields and default values. The script `data_migration.go` is isolated from the main application and can be found in the `migrations` directory.
+
+2. **Set Environment Variables**: Before running the migration, make sure that the MongoDB URI and database name are correctly set in the `.env` file or as environment variables.
+
+3. **Run the Migration**: Execute the migration script by running:
+   ```bash
+   go run migrations/data_migration.go
+   ```
+   This script connects to the MongoDB database, updates the user documents, and logs the outcome.
+
+   To run the data migration script with an inline environment variable setting in Windows PowerShell, use the following command:
+   ```
+   $env:MONGO_URI="mongodb://your_uri_here"; go run migrations/data_migration.go
+   ```
+
+#### Error Handling
+If the migration fails, the script will log an error with a specific failure message. Check the logs to identify any issues with the migration process.
+
+#### Verification
+Post-migration, verify the updates by querying the MongoDB database to ensure that all documents reflect the new schema changes.
+
+#### Rollback Strategy
+In case of a migration failure or if the new data model needs to be reverted, prepare a rollback script that can restore the previous state of the database documents.
+
+### Additional Notes
+- Always backup the database before running a migration to prevent data loss.
+- Test the migration process in a development or staging environment before applying changes to the production database.
 

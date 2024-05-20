@@ -10,10 +10,28 @@ definitions:
     - email
     - password
     type: object
+  model.Address:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      postalCode:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+    required:
+    - city
+    - country
+    - postalCode
+    - state
+    type: object
   profileController.UpdateProfileInput:
     properties:
       address:
-        type: string
+        $ref: '#/definitions/model.Address'
       bio:
         type: string
       birthday:
@@ -30,6 +48,8 @@ definitions:
       nationality:
         type: string
       phone:
+        type: string
+      profilePicture:
         type: string
     required:
     - firstName

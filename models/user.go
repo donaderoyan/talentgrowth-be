@@ -7,22 +7,34 @@ import (
 )
 
 type User struct {
-	ID            primitive.ObjectID `bson:"_id,omitempty"`
-	FirstName     string             `bson:"firstName" validate:"alpha"`
-	LastName      string             `bson:"lastName" validate:"alpha"`
-	Email         string             `bson:"email" validate:"required,email"`
-	Password      string             `bson:"password" validate:"required"`
-	RememberToken string             `bson:"rememberToken,omitempty"`
-	Phone         string             `bson:"phone" validate:"e164"`
-	Address       string             `bson:"address"`
-	Birthday      time.Time          `bson:"birthday,omitempty" validate:"omitempty,datetime"`
-	Gender        string             `bson:"gender,omitempty" validate:"omitempty,oneof=male female other"`
-	Nationality   string             `bson:"nationality,omitempty"`
-	Bio           string             `bson:"bio,omitempty"`
-	CreatedAt     time.Time          `bson:"createdAt"`
-	UpdatedAt     time.Time          `bson:"updatedAt"`
-	DeletedAt     *time.Time         `bson:"deletedAt,omitempty"`
+	ID             primitive.ObjectID `bson:"_id,omitempty"`
+	FirstName      string             `bson:"firstName" validate:"alpha"`
+	LastName       string             `bson:"lastName" validate:"alpha"`
+	Email          string             `bson:"email" validate:"required,email"`
+	Password       string             `bson:"password" validate:"required"`
+	RememberToken  string             `bson:"rememberToken,omitempty"`
+	Phone          string             `bson:"phone" validate:"e164"`
+	Birthday       time.Time          `bson:"birthday,omitempty" validate:"omitempty,datetime"`
+	Gender         string             `bson:"gender,omitempty" validate:"omitempty,oneof=male female other"`
+	Nationality    string             `bson:"nationality,omitempty"`
+	Bio            string             `bson:"bio,omitempty"`
+	ProfilePicture string             `bson:"profile_picture,omitempty" validate:"omitempty,url"`
+
+	// Using 'dive' in validation to apply validation rules on each field of the struct
+	Address Address `bson:"address,omitempty" validate:"omitempty"`
+
+	CreatedAt time.Time  `bson:"createdAt"`
+	UpdatedAt time.Time  `bson:"updatedAt"`
+	DeletedAt *time.Time `bson:"deletedAt,omitempty"`
 	// RoleID        primitive.ObjectID `bson:"roleId" validate:"required"` // currently not used
+}
+
+type Address struct {
+	Street     string `bson:"street,omitempty" validate:"omitempty"`
+	City       string `bson:"city" validate:"required"`
+	State      string `bson:"state" validate:"required"`
+	PostalCode string `bson:"postalCode" validate:"required"`
+	Country    string `bson:"country" validate:"required"`
 }
 
 // SoftDelete sets the DeletedAt field to the current time to mark an entry as deleted.

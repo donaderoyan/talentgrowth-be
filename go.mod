@@ -37,7 +37,6 @@ require (
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/tools v0.21.0 // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 )
 
 require (
@@ -48,7 +47,6 @@ require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/joho/godotenv v1.5.1

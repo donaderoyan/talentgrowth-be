@@ -209,6 +209,32 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Address": {
+            "type": "object",
+            "required": [
+                "city",
+                "country",
+                "postalCode",
+                "state"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "postalCode": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
         "profileController.UpdateProfileInput": {
             "type": "object",
             "required": [
@@ -218,7 +244,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "address": {
-                    "type": "string"
+                    "$ref": "#/definitions/model.Address"
                 },
                 "bio": {
                     "type": "string"
@@ -243,6 +269,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phone": {
+                    "type": "string"
+                },
+                "profilePicture": {
                     "type": "string"
                 }
             }
