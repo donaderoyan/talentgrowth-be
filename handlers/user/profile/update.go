@@ -38,7 +38,7 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 		return
 	}
 
-	if errValidator := util.Validator(input); errValidator != nil {
+	if errValidator := util.Validator(input, "updateValidation"); errValidator != nil {
 		util.ErrorResponse(ctx, "The input value is invalid", http.StatusBadRequest, http.MethodPut, errValidator.Error())
 		return
 	}
@@ -51,7 +51,7 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 			return
 		default:
 			// Handle other unexpected errors
-			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPut, errUpdate.Error())
+			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPut, nil)
 			return
 		}
 	}

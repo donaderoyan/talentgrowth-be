@@ -1,4 +1,4 @@
-package util
+package util_test
 
 import (
 	"testing"
@@ -6,6 +6,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
+
+	util "github.com/donaderoyan/talentgrowth-be/utils"
 )
 
 func TestSign(t *testing.T) {
@@ -16,13 +18,13 @@ func TestSign(t *testing.T) {
 	secretKey := "JWT_SECRET"
 	expirationTime := 15 * time.Minute
 
-	token, err := Sign(data, secretKey, expirationTime)
+	token, err := util.Sign(data, secretKey, expirationTime)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, token)
 
 	// Verify the token
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(GodotEnv(secretKey)), nil
+		return []byte(util.GodotEnv(secretKey)), nil
 	})
 	assert.Nil(t, err)
 	assert.True(t, parsedToken.Valid)
@@ -42,15 +44,15 @@ func TestVerifyToken(t *testing.T) {
 	secretKey := "JWT_SECRET"
 	expirationTime := 15 * time.Minute
 
-	token, _ := Sign(data, secretKey, expirationTime)
+	token, _ := util.Sign(data, secretKey, expirationTime)
 
 	// Test valid token
-	validToken, err := VerifyToken(token, secretKey)
+	validToken, err := util.VerifyToken(token, secretKey)
 	assert.Nil(t, err)
 	assert.NotNil(t, validToken)
 
 	// Test invalid token
-	invalidToken, err := VerifyToken("invalidtoken", secretKey)
+	invalidToken, err := util.VerifyToken("invalidtoken", secretKey)
 	assert.NotNil(t, err)
 	assert.Nil(t, invalidToken)
 }
@@ -63,12 +65,12 @@ func TestDecodeToken(t *testing.T) {
 	secretKey := "JWT_SECRET"
 	expirationTime := 15 * time.Minute
 
-	tokenString, _ := Sign(data, secretKey, expirationTime)
+	tokenString, _ := util.Sign(data, secretKey, expirationTime)
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(GodotEnv(secretKey)), nil
+		return []byte(util.GodotEnv(secretKey)), nil
 	})
 
-	decodedToken, err := DecodeToken(token)
+	decodedToken, err := util.DecodeToken(token)
 	assert.Nil(t, err)
 	assert.Equal(t, "123", decodedToken.Claims.ID)
 	assert.Equal(t, "test@example.com", decodedToken.Claims.Email)

@@ -1,45 +1,66 @@
-package util
+package util_test
 
 import (
 	"testing"
+
+	util "github.com/donaderoyan/talentgrowth-be/utils"
+
+	model "github.com/donaderoyan/talentgrowth-be/models"
 )
 
-type Login struct {
-	Email    string `validate:"required,email"`
-	Password string `validate:"required,gt=7"`
+type testUser struct {
+	FirstName      string        `json:"firstName" validate:"required,alpha" updateValidation:"omitempty,alpha"`
+	LastName       string        `json:"lastName" validate:"required,alpha" updateValidation:"omitempty,alpha"`
+	Phone          string        `json:"phone" validate:"required,e164" updateValidation:"omitempty,e164"`
+	Address        model.Address `json:"address" validate:"omitempty" updateValidation:"omitempty"`
+	Birthday       string        `json:"birthday" validate:"omitempty,customdate,datebeforetoday" updateValidation:"omitempty,customdate,datebeforetoday"`
+	Gender         string        `json:"gender" validate:"omitempty,oneof=male female" updateValidation:"omitempty,oneof=male female"`
+	Nationality    string        `json:"nationality" validate:"omitempty" updateValidation:"omitempty"`
+	Bio            string        `json:"bio" validate:"omitempty" updateValidation:"omitempty"`
+	ProfilePicture string        `json:"profilePicture" validate:"omitempty,url" updateValidation:"omitempty,url"`
 }
 
-// TestValidator tests the Validator function for various struct validation scenarios
-func TestValidator(t *testing.T) {
-	t.Run("Test Empty Email and Password", func(t *testing.T) {
-		login := Login{Email: "", Password: ""}
-		err := Validator(login)
-		if err == nil {
-			t.Errorf("Expected error for empty fields, got nil")
-		}
-	})
+func TestValidateLoginInput(t *testing.T) {
+	input := testUser{
+		FirstName: "John",
+		LastName:  "Doe",
+		Phone:     "+1234567890",
+		Address:   model.Address{City: "City", State: "State", PostalCode: "12345", Country: "Country"},
+		Birthday:  "01-01-1990",
+		Gender:    "male",
+	}
 
-	t.Run("Test Invalid Email Format", func(t *testing.T) {
-		login := Login{Email: "invalid-email", Password: "password123"}
-		err := Validator(login)
-		if err == nil {
-			t.Errorf("Expected error for invalid email format, got nil")
-		}
-	})
+	err := util.Validator(input, "validate")
+	if err != nil {
+		t.Errorf("Validation failed for testUser: %v", err)
+	}
+}
 
-	t.Run("Test Short Password", func(t *testing.T) {
-		login := Login{Email: "email@example.com", Password: "short"}
-		err := Validator(login)
-		if err == nil {
-			t.Errorf("Expected error for short password, got nil")
-		}
-	})
+func TestValidateUpdateProfileInput(t *testing.T) {
+	input := testUser{
+		FirstName: "Jane",
+		LastName:  "Smith",
+		Phone:     "+0987654321",
+		Address:   model.Address{City: "New City", State: "New State", PostalCode: "54321", Country: "New Country"},
+		Birthday:  "02-02-1992",
+		Gender:    "female",
+	}
 
-	t.Run("Test Valid Input", func(t *testing.T) {
-		login := Login{Email: "email@example.com", Password: "password123"}
-		err := Validator(login)
-		if err != nil {
-			t.Errorf("Expected no error for valid input, got %v", err)
-		}
-	})
+	err := util.Validator(input, "updateValidation")
+	if err != nil {
+		t.Errorf("Validation failed for testUser: %v", err)
+	}
+}
+
+func TestValidatePartialUpdateProfileInput(t *testing.T) {
+	input := testUser{
+		FirstName: "Jane",
+		Phone:     "+0987654321",
+		Address:   model.Address{State: "New State", PostalCode: "54321"},
+	}
+
+	err := util.Validator(input, "updateValidation")
+	if err != nil {
+		t.Errorf("Validation failed for testUser: %v", err)
+	}
 }

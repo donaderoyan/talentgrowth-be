@@ -36,7 +36,7 @@ func (h *handler) LoginHandler(ctx *gin.Context) {
 		return
 	}
 
-	if errValidator := util.Validator(input); errValidator != nil {
+	if errValidator := util.Validator(input, "validate"); errValidator != nil {
 		util.ErrorResponse(ctx, "The input value is invalid", http.StatusBadRequest, http.MethodPost, errValidator.Error())
 		return
 	}
@@ -52,7 +52,7 @@ func (h *handler) LoginHandler(ctx *gin.Context) {
 			return
 		default:
 			// Handle other unexpected errors
-			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPost, errLogin.Error())
+			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPost, nil)
 			return
 		}
 	} else {

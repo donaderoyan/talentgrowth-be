@@ -37,7 +37,7 @@ func (h *handler) RegisterHandler(ctx *gin.Context) {
 		return
 	}
 
-	if errValidator := util.Validator(input); errValidator != nil {
+	if errValidator := util.Validator(input, "validate"); errValidator != nil {
 		util.ErrorResponse(ctx, "The input value is invalid", http.StatusBadRequest, http.MethodPost, errValidator.Error())
 		return
 	}

@@ -18,7 +18,7 @@ type User struct {
 	Gender         string             `bson:"gender,omitempty" validate:"omitempty,oneof=male female other"`
 	Nationality    string             `bson:"nationality,omitempty"`
 	Bio            string             `bson:"bio,omitempty"`
-	ProfilePicture string             `bson:"profile_picture,omitempty" validate:"omitempty,url"`
+	ProfilePicture string             `bson:"profilePicture,omitempty" validate:"omitempty,url"`
 
 	// Using 'dive' in validation to apply validation rules on each field of the struct
 	Address Address `bson:"address,omitempty" validate:"omitempty"`

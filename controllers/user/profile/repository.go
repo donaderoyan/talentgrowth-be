@@ -3,7 +3,6 @@ package profileController
 import (
 	"context"
 	"fmt"
-	"time"
 
 	model "github.com/donaderoyan/talentgrowth-be/models"
 	util "github.com/donaderoyan/talentgrowth-be/utils"
@@ -13,7 +12,7 @@ import (
 )
 
 type Repository interface {
-	UpdateProfile(userID string, user *model.User) (*model.User, error)
+	UpdateProfile(userID string, updates bson.M) (*model.User, error)
 }
 
 type repository struct {
@@ -32,7 +31,7 @@ func (e *UserProfileUpdateError) Error() string {
 	return fmt.Sprintf("Profile update error: %s - %s", e.Code, e.Message)
 }
 
-func (r *repository) UpdateProfile(userID string, user *model.User) (*model.User, error) {
+func (r *repository) UpdateProfile(userID string, updates bson.M) (*model.User, error) {
 	// Start a session for transaction
 	session, err := r.db.Client().StartSession()
 	if err != nil {
@@ -43,7 +42,7 @@ func (r *repository) UpdateProfile(userID string, user *model.User) (*model.User
 	// Convert userID to primitive.ObjectID
 	userIDPrimitive, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
-		return user, &UserProfileUpdateError{util.NewBaseError("INVALID_USER_ID", "Invalid user ID format")}
+		return nil, &UserProfileUpdateError{util.NewBaseError("INVALID_USER_ID", "Invalid user ID format")}
 	}
 
 	// Transaction handling
@@ -58,26 +57,9 @@ func (r *repository) UpdateProfile(userID string, user *model.User) (*model.User
 			}
 			return err
 		}
-		// Ensure correct field names are used for MongoDB document
-		correctFieldNames := bson.M{
-			"firstName":          user.FirstName,
-			"lastName":           user.LastName,
-			"phone":              user.Phone,
-			"birthday":           user.Birthday,
-			"gender":             user.Gender,
-			"nationality":        user.Nationality,
-			"bio":                user.Bio,
-			"updatedAt":          time.Now(),
-			"profilePicture":     user.ProfilePicture,
-			"address.street":     user.Address.Street,
-			"address.city":       user.Address.City,
-			"address.state":      user.Address.State,
-			"address.postalCode": user.Address.PostalCode,
-			"address.country":    user.Address.Country,
-		}
 
 		// Update user profile with only the specified fields
-		_, err = r.db.Collection("users").UpdateByID(sc, userIDPrimitive, bson.M{"$set": correctFieldNames})
+		_, err = r.db.Collection("users").UpdateByID(sc, userIDPrimitive, bson.M{"$set": updates})
 		if err != nil {
 			fmt.Printf("Error updating user profile: %v", err)
 			return &UserProfileUpdateError{util.NewBaseError("USER_PROFILE_UPDATE_ERROR", "Profile update failed")}

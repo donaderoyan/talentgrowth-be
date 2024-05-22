@@ -10,7 +10,7 @@ import (
 )
 
 // Validator function to validate struct fields based on tags
-func Validator(s interface{}) error {
+func Validator(s interface{}, tagName string) error {
 	// Check if the input is a struct
 	if reflect.TypeOf(s).Kind() != reflect.Struct {
 		return fmt.Errorf("validation error: expected a struct, got %s", reflect.TypeOf(s).Kind())
@@ -18,6 +18,9 @@ func Validator(s interface{}) error {
 
 	// Initialize the validator
 	validate := validator.New()
+	if tagName != "" {
+		validate.SetTagName(tagName)
+	}
 
 	// Register custom date validation for dd-mm-yyyy format
 	validate.RegisterValidation("customdate", func(fl validator.FieldLevel) bool {
