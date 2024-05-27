@@ -1,19 +1,19 @@
-package handlerRegister
+package registerhandler
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	registerController "github.com/donaderoyan/talentgrowth-be/controllers/auth/register"
+	register "github.com/donaderoyan/talentgrowth-be/controllers/auth/register"
 	util "github.com/donaderoyan/talentgrowth-be/utils"
 )
 
 type handler struct {
-	service registerController.Service
+	service register.Service
 }
 
-func NewHandlerRegister(service registerController.Service) *handler {
+func NewHandlerRegister(service register.Service) *handler {
 	return &handler{service: service}
 }
 
@@ -23,14 +23,14 @@ func NewHandlerRegister(service registerController.Service) *handler {
 // @Tags Authentication
 // @Accept json
 // @Produce json
-// @Param register body registerController.RegisterInput true "Register Input"
+// @Param register body register.RegisterInput true "Register Input"
 // @Success 200 {object} map[string]interface{} "User registered successfully"
 // @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
 // @Failure 409 {object} map[string]interface{} "Conflict, user already exists"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /api/v1/register [post]
 func (h *handler) RegisterHandler(ctx *gin.Context) {
-	var input registerController.RegisterInput
+	var input register.RegisterInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		util.ErrorResponse(ctx, "Register new account failed", http.StatusBadRequest, http.MethodPost, err.Error())
@@ -45,10 +45,10 @@ func (h *handler) RegisterHandler(ctx *gin.Context) {
 	responseData, errRegister := h.service.RegisterService(&input)
 	if errRegister != nil {
 		switch errRegister.(type) {
-		case *registerController.UserAlreadyExistsError:
+		case *register.UserAlreadyExistsError:
 			util.ErrorResponse(ctx, "Register new account failed", http.StatusBadRequest, http.MethodPost, errRegister.Error())
 			return
-		case *registerController.UserRegistrationError:
+		case *register.UserRegistrationError:
 			util.ErrorResponse(ctx, "Register new account failed", http.StatusForbidden, http.MethodPost, errRegister.Error())
 			return
 		default:

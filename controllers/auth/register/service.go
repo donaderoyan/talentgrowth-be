@@ -1,4 +1,4 @@
-package registerController
+package register
 
 import (
 	"time"

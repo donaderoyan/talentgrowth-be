@@ -43,7 +43,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/loginController.LoginInput"
+                            "$ref": "#/definitions/login.LoginInput"
                         }
                     }
                 ],
@@ -99,7 +99,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/registerController.RegisterInput"
+                            "$ref": "#/definitions/register.RegisterInput"
                         }
                     }
                 ],
@@ -136,7 +136,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/user/profile/{id}": {
-            "put": {
+            "patch": {
                 "description": "Update the profile of a user by their ID",
                 "consumes": [
                     "application/json"
@@ -162,7 +162,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/profileController.UpdateProfileInput"
+                            "$ref": "#/definitions/profile.UpdateProfileInput"
                         }
                     }
                 ],
@@ -193,7 +193,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "loginController.LoginInput": {
+        "login.LoginInput": {
             "type": "object",
             "required": [
                 "email",
@@ -235,7 +235,7 @@ const docTemplate = `{
                 }
             }
         },
-        "profileController.UpdateProfileInput": {
+        "profile.UpdateProfileInput": {
             "type": "object",
             "required": [
                 "firstName",
@@ -276,7 +276,7 @@ const docTemplate = `{
                 }
             }
         },
-        "registerController.RegisterInput": {
+        "register.RegisterInput": {
             "type": "object",
             "required": [
                 "email",

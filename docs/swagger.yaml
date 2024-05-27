@@ -1,5 +1,5 @@
 definitions:
-  loginController.LoginInput:
+  login.LoginInput:
     properties:
       email:
         type: string
@@ -28,7 +28,7 @@ definitions:
     - postalCode
     - state
     type: object
-  profileController.UpdateProfileInput:
+  profile.UpdateProfileInput:
     properties:
       address:
         $ref: '#/definitions/model.Address'
@@ -56,7 +56,7 @@ definitions:
     - lastName
     - phone
     type: object
-  registerController.RegisterInput:
+  register.RegisterInput:
     properties:
       email:
         type: string
@@ -96,7 +96,7 @@ paths:
         name: login
         required: true
         schema:
-          $ref: '#/definitions/loginController.LoginInput'
+          $ref: '#/definitions/login.LoginInput'
       produces:
       - application/json
       responses:
@@ -135,7 +135,7 @@ paths:
         name: register
         required: true
         schema:
-          $ref: '#/definitions/registerController.RegisterInput'
+          $ref: '#/definitions/register.RegisterInput'
       produces:
       - application/json
       responses:
@@ -163,7 +163,7 @@ paths:
       tags:
       - Authentication
   /api/v1/user/profile/{id}:
-    put:
+    patch:
       consumes:
       - application/json
       description: Update the profile of a user by their ID
@@ -178,7 +178,7 @@ paths:
         name: profile
         required: true
         schema:
-          $ref: '#/definitions/profileController.UpdateProfileInput'
+          $ref: '#/definitions/profile.UpdateProfileInput'
       produces:
       - application/json
       responses:

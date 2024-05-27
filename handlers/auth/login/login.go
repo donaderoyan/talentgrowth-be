@@ -1,18 +1,18 @@
-package handlerLogin
+package loginhandler
 
 import (
 	"net/http"
 
-	loginController "github.com/donaderoyan/talentgrowth-be/controllers/auth/login"
+	login "github.com/donaderoyan/talentgrowth-be/controllers/auth/login"
 	util "github.com/donaderoyan/talentgrowth-be/utils"
 	"github.com/gin-gonic/gin"
 )
 
 type handler struct {
-	service loginController.Service
+	service login.Service
 }
 
-func NewHandlerLogin(service loginController.Service) *handler {
+func NewHandlerLogin(service login.Service) *handler {
 	return &handler{service: service}
 }
 
@@ -22,14 +22,14 @@ func NewHandlerLogin(service loginController.Service) *handler {
 // @Tags Authentication
 // @Accept json
 // @Produce json
-// @Param login body loginController.LoginInput true "Login Credentials"
+// @Param login body login.LoginInput true "Login Credentials"
 // @Success 200 {object} map[string]interface{} "Login successful, returns access token"
 // @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
 // @Failure 404 {object} map[string]interface{} "User not found"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /api/v1/login [post]
 func (h *handler) LoginHandler(ctx *gin.Context) {
-	var input loginController.LoginInput
+	var input login.LoginInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		util.ErrorResponse(ctx, "Login failed", http.StatusBadRequest, http.MethodPost, err.Error())
@@ -44,10 +44,10 @@ func (h *handler) LoginHandler(ctx *gin.Context) {
 	resultLogin, errLogin := h.service.LoginService(&input)
 	if errLogin != nil {
 		switch errLogin.(type) {
-		case *loginController.UserLoginError:
+		case *login.UserLoginError:
 			util.ErrorResponse(ctx, "Login failed", http.StatusInternalServerError, http.MethodPost, errLogin.Error())
 			return
-		case *loginController.UserLoginNotFoundError:
+		case *login.UserLoginNotFoundError:
 			util.ErrorResponse(ctx, "Login failed", http.StatusNotFound, http.MethodPost, errLogin.Error())
 			return
 		default:

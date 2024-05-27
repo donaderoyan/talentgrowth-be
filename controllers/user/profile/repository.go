@@ -1,4 +1,4 @@
-package profileController
+package profile
 
 import (
 	"context"

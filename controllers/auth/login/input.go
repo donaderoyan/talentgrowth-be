@@ -1,4 +1,4 @@
-package loginController
+package login
 
 type LoginInput struct {
 	Email    string `json:"email" validate:"required,email"`

@@ -35,7 +35,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/loginController.LoginInput"
+                            "$ref": "#/definitions/login.LoginInput"
                         }
                     }
                 ],
@@ -91,7 +91,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/registerController.RegisterInput"
+                            "$ref": "#/definitions/register.RegisterInput"
                         }
                     }
                 ],
@@ -128,7 +128,7 @@
             }
         },
         "/api/v1/user/profile/{id}": {
-            "put": {
+            "patch": {
                 "description": "Update the profile of a user by their ID",
                 "consumes": [
                     "application/json"
@@ -154,7 +154,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/profileController.UpdateProfileInput"
+                            "$ref": "#/definitions/profile.UpdateProfileInput"
                         }
                     }
                 ],
@@ -185,7 +185,7 @@
         }
     },
     "definitions": {
-        "loginController.LoginInput": {
+        "login.LoginInput": {
             "type": "object",
             "required": [
                 "email",
@@ -227,7 +227,7 @@
                 }
             }
         },
-        "profileController.UpdateProfileInput": {
+        "profile.UpdateProfileInput": {
             "type": "object",
             "required": [
                 "firstName",
@@ -268,7 +268,7 @@
                 }
             }
         },
-        "registerController.RegisterInput": {
+        "register.RegisterInput": {
             "type": "object",
             "required": [
                 "email",

@@ -1,4 +1,4 @@
-package loginController
+package login
 
 import (
 	model "github.com/donaderoyan/talentgrowth-be/models"

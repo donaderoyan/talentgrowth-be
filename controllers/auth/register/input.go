@@ -1,4 +1,4 @@
-package registerController
+package register
 
 type RegisterInput struct {
 	FirstName string `json:"firstName" validate:"required,alpha"`
