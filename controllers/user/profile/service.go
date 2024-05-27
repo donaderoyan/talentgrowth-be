@@ -36,7 +36,7 @@ func (s *service) UpdateProfileService(userID string, input *UpdateProfileInput)
 	}
 
 	// Handle address update if present
-	if input.Address != (model.Address{}) {
+	if input.Address != (Address{}) {
 		correctFieldNames["address.street"] = input.Address.Street
 		correctFieldNames["address.city"] = input.Address.City
 		correctFieldNames["address.state"] = input.Address.State
@@ -48,7 +48,7 @@ func (s *service) UpdateProfileService(userID string, input *UpdateProfileInput)
 	for key, value := range correctFieldNames {
 		if value == nil || (reflect.TypeOf(value).Kind() == reflect.String && value == "") {
 			delete(correctFieldNames, key)
-		} else if val, ok := value.(model.Address); ok && val == (model.Address{}) {
+		} else if val, ok := value.(Address); ok && val == (Address{}) {
 			delete(correctFieldNames, key)
 		}
 	}

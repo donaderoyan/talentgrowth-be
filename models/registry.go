@@ -7,6 +7,8 @@ type Model struct {
 func RegisterModels() []string {
 	return []string{
 		"User",
+		"MusicalInformation",
+		"CoursePreferences",
 		// "Product", etc ...
 	}
 }
