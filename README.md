@@ -1,5 +1,6 @@
-# talentgrowth-be
-Backend side
+# “Talentgrowth: A Musical Course Academy Powered by Golang, Docker, and MongoDB”
+
+Combines the power of Golang, Docker, and MongoDB to deliver an exceptional learning experience. Explore our RESTful API, designed for seamless integration and scalability. This repository contains code for learning purposes, and you’re welcome to use it freely 🎶✨
 
 ## Getting Started with talentgrowth-be
 
