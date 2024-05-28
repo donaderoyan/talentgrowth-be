@@ -22,7 +22,7 @@ Before you begin, ensure you have the following installed:
    ```
 
 2. Set up the environment variables:
-   - Copy the `.envxample` file to `.env`.
+   - Create file `.env`.
    - The dev `.env` file should look like this (modify the variables as needed):
      ```
         GO_PORT=7890
