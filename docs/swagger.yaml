@@ -10,7 +10,30 @@ definitions:
     - email
     - password
     type: object
-  model.Address:
+  musicalinfo.MusicalInfoInput:
+    properties:
+      favorite_artists:
+        items:
+          type: string
+        type: array
+      genres:
+        items:
+          type: string
+        type: array
+      learning_goals:
+        items:
+          type: string
+        type: array
+      primary_instrument:
+        type: string
+      secondary_instruments:
+        items:
+          type: string
+        type: array
+      skill_level:
+        type: string
+    type: object
+  profile.Address:
     properties:
       city:
         type: string
@@ -31,7 +54,7 @@ definitions:
   profile.UpdateProfileInput:
     properties:
       address:
-        $ref: '#/definitions/model.Address'
+        $ref: '#/definitions/profile.Address'
       bio:
         type: string
       birthday:
@@ -52,7 +75,10 @@ definitions:
       profilePicture:
         type: string
     required:
+    - address
+    - birthday
     - firstName
+    - gender
     - lastName
     - phone
     type: object
@@ -93,7 +119,7 @@ paths:
       parameters:
       - description: Login Credentials
         in: body
-        name: login
+        name: request
         required: true
         schema:
           $ref: '#/definitions/login.LoginInput'
@@ -132,7 +158,7 @@ paths:
       parameters:
       - description: Register Input
         in: body
-        name: register
+        name: request
         required: true
         schema:
           $ref: '#/definitions/register.RegisterInput'
@@ -162,8 +188,84 @@ paths:
       summary: Register new user
       tags:
       - Authentication
+  /api/v1/user/musicalinfo/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update musical information for a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Musical information to update
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/musicalinfo.MusicalInfoInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Musical information updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update musical information (partial update)
+      tags:
+      - User
   /api/v1/user/profile/{id}:
     patch:
+      consumes:
+      - application/json
+      description: Update the profile of a user by their ID. Only the fields that
+        are provided will be updated.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Profile Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/profile.UpdateProfileInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update user profile (partial update)
+      tags:
+      - User
+    put:
       consumes:
       - application/json
       description: Update the profile of a user by their ID
@@ -175,7 +277,7 @@ paths:
         type: string
       - description: Update Profile Data
         in: body
-        name: profile
+        name: request
         required: true
         schema:
           $ref: '#/definitions/profile.UpdateProfileInput'

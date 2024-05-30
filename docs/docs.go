@@ -39,7 +39,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Login Credentials",
-                        "name": "login",
+                        "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -95,7 +95,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Register Input",
-                        "name": "register",
+                        "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -135,8 +135,64 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/user/profile/{id}": {
+        "/api/v1/user/musicalinfo/{id}": {
             "patch": {
+                "description": "Update musical information for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update musical information (partial update)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Musical information to update",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/musicalinfo.MusicalInfoInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Musical information updated successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/profile/{id}": {
+            "put": {
                 "description": "Update the profile of a user by their ID",
                 "consumes": [
                     "application/json"
@@ -158,7 +214,61 @@ const docTemplate = `{
                     },
                     {
                         "description": "Update Profile Data",
-                        "name": "profile",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/profile.UpdateProfileInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update the profile of a user by their ID. Only the fields that are provided will be updated.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user profile (partial update)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Profile Data",
+                        "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -209,7 +319,42 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Address": {
+        "musicalinfo.MusicalInfoInput": {
+            "type": "object",
+            "properties": {
+                "favorite_artists": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "learning_goals": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "primary_instrument": {
+                    "type": "string"
+                },
+                "secondary_instruments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "skill_level": {
+                    "type": "string"
+                }
+            }
+        },
+        "profile.Address": {
             "type": "object",
             "required": [
                 "city",
@@ -238,13 +383,16 @@ const docTemplate = `{
         "profile.UpdateProfileInput": {
             "type": "object",
             "required": [
+                "address",
+                "birthday",
                 "firstName",
+                "gender",
                 "lastName",
                 "phone"
             ],
             "properties": {
                 "address": {
-                    "$ref": "#/definitions/model.Address"
+                    "$ref": "#/definitions/profile.Address"
                 },
                 "bio": {
                     "type": "string"

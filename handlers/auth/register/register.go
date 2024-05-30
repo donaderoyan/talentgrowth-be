@@ -23,7 +23,7 @@ func NewHandlerRegister(service register.Service) *handler {
 // @Tags Authentication
 // @Accept json
 // @Produce json
-// @Param register body register.RegisterInput true "Register Input"
+// @Param request body register.RegisterInput true "Register Input"
 // @Success 200 {object} map[string]interface{} "User registered successfully"
 // @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
 // @Failure 409 {object} map[string]interface{} "Conflict, user already exists"

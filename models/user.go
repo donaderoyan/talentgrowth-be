@@ -21,8 +21,8 @@ type User struct {
 	ProfilePicture string             `bson:"profilePicture,omitempty" json:"profilePicture,omitempty"`
 	Address        Address            `bson:"address,omitempty" json:"address,omitempty"`
 
-	MusicalInfoID primitive.ObjectID `bson:"musical_info_id,omitempty" json:"musical_info_id,omitempty"` // Reference to MusicalInformation
-	CoursePrefs   CoursePreferences  `bson:"course_preferences" json:"course_preferences"`               // Using embedded approach for now, will be change when Instructor model is implemented
+	MusicalInfoID primitive.ObjectID `bson:"musicalInfoID,omitempty" json:"musicalInfoID,omitempty"` // Reference to MusicalInformation
+	CoursePrefs   CoursePreferences  `bson:"coursePreferences" json:"coursePreferences"`             // Using embedded approach for now, will be change when Instructor model is implemented
 
 	CreatedAt time.Time  `bson:"createdAt" json:"createdAt"`
 	UpdatedAt time.Time  `bson:"updatedAt" json:"updatedAt"`

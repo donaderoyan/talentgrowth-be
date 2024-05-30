@@ -18,13 +18,13 @@ func NewHandlerProfile(service profile.Service) *handler {
 }
 
 // Swagger documentation for UpdateProfileHandler
-// @Summary Update user profile
-// @Description Update the profile of a user by their ID
+// @Summary Update user profile (partial update)
+// @Description Update the profile of a user by their ID. Only the fields that are provided will be updated.
 // @Tags User
 // @Accept json
 // @Produce json
 // @Param id path string true "User ID"
-// @Param profile body profile.UpdateProfileInput true "Update Profile Data"
+// @Param request body profile.UpdateProfileInput true "Update Profile Data"
 // @Success 200 {object} map[string]interface{} "Profile updated successfully"
 // @Failure 400 {object} map[string]interface{} "Bad request"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
@@ -34,12 +34,12 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 	var input profile.UpdateProfileInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPut, err.Error())
+		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPatch, err.Error())
 		return
 	}
 
 	if errValidator := util.Validator(input, "updateValidation"); errValidator != nil {
-		util.ErrorResponse(ctx, "The input value is invalid", http.StatusBadRequest, http.MethodPut, errValidator.Error())
+		util.ErrorResponse(ctx, "The input value is invalid", http.StatusBadRequest, http.MethodPatch, errValidator.Error())
 		return
 	}
 
@@ -47,11 +47,11 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 	if errUpdate != nil {
 		switch errUpdate.(type) {
 		case *profile.UserProfileUpdateError:
-			util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPut, errUpdate.Error())
+			util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPatch, errUpdate.Error())
 			return
 		default:
 			// Handle other unexpected errors
-			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPut, nil)
+			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPatch, nil)
 			return
 		}
 	}
@@ -67,5 +67,5 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 		"bio":         updatedUser.Bio,
 	}
 
-	util.APIResponse(ctx, "Profile updated successfully", http.StatusOK, http.MethodPut, responseData)
+	util.APIResponse(ctx, "Profile updated successfully", http.StatusOK, http.MethodPatch, responseData)
 }

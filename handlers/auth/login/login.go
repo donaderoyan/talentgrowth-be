@@ -22,7 +22,7 @@ func NewHandlerLogin(service login.Service) *handler {
 // @Tags Authentication
 // @Accept json
 // @Produce json
-// @Param login body login.LoginInput true "Login Credentials"
+// @Param request body login.LoginInput true "Login Credentials"
 // @Success 200 {object} map[string]interface{} "Login successful, returns access token"
 // @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
 // @Failure 404 {object} map[string]interface{} "User not found"
