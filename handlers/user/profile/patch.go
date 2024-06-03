@@ -9,14 +9,6 @@ import (
 	util "github.com/donaderoyan/talentgrowth-be/utils"
 )
 
-type handler struct {
-	service profile.Service
-}
-
-func NewHandlerProfile(service profile.Service) *handler {
-	return &handler{service: service}
-}
-
 // Swagger documentation for UpdateProfileHandler
 // @Summary Update user profile (partial update)
 // @Description Update the profile of a user by their ID. Only the fields that are provided will be updated.
@@ -30,7 +22,11 @@ func NewHandlerProfile(service profile.Service) *handler {
 // @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /api/v1/user/profile/{id} [patch]
 func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
-	userID := ctx.Param("id") // Assuming 'id' is passed as a URL parameter
+	userID := ctx.Param("id")
+	if userID == "" {
+		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPut, "ID is required")
+		return
+	}
 	var input profile.UpdateProfileInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -57,8 +53,8 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 	}
 
 	responseData := gin.H{
-		"first_name":  updatedUser.FirstName,
-		"last_name":   updatedUser.LastName,
+		"firstName":   updatedUser.FirstName,
+		"lastName":    updatedUser.LastName,
 		"phone":       updatedUser.Phone,
 		"address":     updatedUser.Address,
 		"birthday":    updatedUser.Birthday,

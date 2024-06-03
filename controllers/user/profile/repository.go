@@ -13,6 +13,7 @@ import (
 
 type Repository interface {
 	UpdateProfile(userID string, updates bson.M) (*model.User, error)
+	GetProfile(userID string) (*model.User, error)
 }
 
 type repository struct {
@@ -29,6 +30,14 @@ type UserProfileUpdateError struct {
 
 func (e *UserProfileUpdateError) Error() string {
 	return fmt.Sprintf("Profile update error: %s - %s", e.Code, e.Message)
+}
+
+type GetUserProfileError struct {
+	*util.BaseError
+}
+
+func (e *GetUserProfileError) Error() string {
+	return fmt.Sprintf("Get user profile error: %s - %s", e.Code, e.Message)
 }
 
 func (r *repository) UpdateProfile(userID string, updates bson.M) (*model.User, error) {
@@ -80,4 +89,37 @@ func (r *repository) UpdateProfile(userID string, updates bson.M) (*model.User, 
 	}
 
 	return &updatedUser, nil
+}
+
+func (r *repository) GetProfile(userID string) (*model.User, error) {
+	session, err := r.db.Client().StartSession()
+	if err != nil {
+		return nil, err
+	}
+	defer session.EndSession(context.Background())
+
+	// Convert userID to primitive.ObjectID
+	userIDPrimitive, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		return nil, &UserProfileUpdateError{util.NewBaseError("INVALID_USER_ID", "Invalid user ID format")}
+	}
+	var dataUser model.User
+	// Transaction handling
+	transactionErr := mongo.WithSession(context.Background(), session, func(sc mongo.SessionContext) error {
+
+		err = r.db.Collection("users").FindOne(sc, bson.M{"_id": userIDPrimitive}).Decode(&dataUser)
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				return &GetUserProfileError{util.NewBaseError("USER_NOT_FOUND", "User not found")}
+			}
+		}
+
+		return nil
+	})
+
+	if transactionErr != nil {
+		return nil, transactionErr
+	}
+
+	return &dataUser, nil
 }

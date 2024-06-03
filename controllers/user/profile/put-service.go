@@ -7,19 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type PutService interface {
-	PutProfileService(userID string, input *UpdateProfileInput) (*model.User, error)
-}
-
-type putservice struct {
-	repository Repository
-}
-
-func NewPutProfileService(repository Repository) *putservice {
-	return &putservice{repository: repository}
-}
-
-func (s *putservice) PutProfileService(userID string, input *UpdateProfileInput) (*model.User, error) {
+func (s *service) PutProfileService(userID string, input *UpdateProfileInput) (*model.User, error) {
 	// Update user profile
 	// Ensure correct field names are used for MongoDB document
 	var parsedBirthday time.Time

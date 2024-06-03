@@ -8,18 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type Service interface {
-	UpdateProfileService(userID string, input *UpdateProfileInput) (*model.User, error)
-}
-
-type service struct {
-	repository Repository
-}
-
-func NewProfileService(repository Repository) *service {
-	return &service{repository: repository}
-}
-
 func (s *service) UpdateProfileService(userID string, input *UpdateProfileInput) (*model.User, error) {
 	// Update user profile
 	// Ensure correct field names are used for MongoDB document

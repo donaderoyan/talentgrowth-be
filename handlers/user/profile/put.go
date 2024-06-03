@@ -9,14 +9,6 @@ import (
 	util "github.com/donaderoyan/talentgrowth-be/utils"
 )
 
-type puthandler struct {
-	putservice profile.PutService
-}
-
-func NewPutHandlerProfile(putservice profile.PutService) *puthandler {
-	return &puthandler{putservice: putservice}
-}
-
 // Swagger documentation for PutProfileHandler
 // @Summary Update user profile
 // @Description Update the profile of a user by their ID
@@ -29,8 +21,12 @@ func NewPutHandlerProfile(putservice profile.PutService) *puthandler {
 // @Failure 400 {object} map[string]interface{} "Bad request"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
 // @Router /api/v1/user/profile/{id} [put]
-func (h *puthandler) PutProfileHandler(ctx *gin.Context) {
-	userID := ctx.Param("id") // Assuming 'id' is passed as a URL parameter
+func (h *handler) PutProfileHandler(ctx *gin.Context) {
+	userID := ctx.Param("id")
+	if userID == "" {
+		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPut, "ID is required")
+		return
+	}
 	var input profile.UpdateProfileInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -43,7 +39,7 @@ func (h *puthandler) PutProfileHandler(ctx *gin.Context) {
 		return
 	}
 
-	updatedUser, errUpdate := h.putservice.PutProfileService(userID, &input)
+	updatedUser, errUpdate := h.service.PutProfileService(userID, &input)
 	if errUpdate != nil {
 		switch errUpdate.(type) {
 		case *profile.UserProfileUpdateError:
@@ -57,8 +53,8 @@ func (h *puthandler) PutProfileHandler(ctx *gin.Context) {
 	}
 
 	responseData := gin.H{
-		"first_name":  updatedUser.FirstName,
-		"last_name":   updatedUser.LastName,
+		"firstName":   updatedUser.FirstName,
+		"lastName":    updatedUser.LastName,
 		"phone":       updatedUser.Phone,
 		"address":     updatedUser.Address,
 		"birthday":    updatedUser.Birthday,

@@ -14,12 +14,8 @@ import (
 func InitUserRoutes(db *mongo.Database, route *gin.Engine) {
 	// Initialize profile
 	profileRepository := profile.NewProfileRepository(db)
-	// - profile service and handler for PATCH method
-	patchProfileService := profile.NewProfileService(profileRepository)
-	patchProfileHandler := profilehandler.NewHandlerProfile(patchProfileService)
-	// - profile service and handler for PUT method
-	putProfileService := profile.NewPutProfileService(profileRepository)
-	putProfileHandler := profilehandler.NewPutHandlerProfile(putProfileService)
+	profileService := profile.NewProfileService(profileRepository)
+	profileHandler := profilehandler.NewHandlerProfile(profileService)
 
 	// Initialize musical information
 	musicalInfoRepository := musicalinfo.NewMusicalInfoRepository(db)
@@ -28,8 +24,9 @@ func InitUserRoutes(db *mongo.Database, route *gin.Engine) {
 
 	userGroup := route.Group("/api/v1/user").Use(middleware.Auth(db))
 	// profile
-	userGroup.PATCH("/profile/:id", patchProfileHandler.UpdateProfileHandler)
-	userGroup.PUT("/profile/:id", putProfileHandler.PutProfileHandler)
+	userGroup.PATCH("/profile/:id", profileHandler.UpdateProfileHandler)
+	userGroup.PUT("/profile/:id", profileHandler.PutProfileHandler)
+	userGroup.GET("/profile/:id", profileHandler.GetProfileHandler)
 	// musical information
 	userGroup.PATCH("/musicalinfo/:id", musicalInfoHandler.UpdateMusicalInfoHandler)
 }
