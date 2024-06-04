@@ -22,7 +22,7 @@ import (
 func (h *handler) GetProfileHandler(ctx *gin.Context) {
 	userID := ctx.Param("id")
 	if userID == "" {
-		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPut, "ID is required")
+		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodGet, "ID is required")
 		return
 	}
 
@@ -30,11 +30,11 @@ func (h *handler) GetProfileHandler(ctx *gin.Context) {
 	if errData != nil {
 		switch errData.(type) {
 		case *profile.GetUserProfileError:
-			util.ErrorResponse(ctx, "Get user profile failed", http.StatusBadRequest, http.MethodPatch, errData.Error())
+			util.ErrorResponse(ctx, "Get user profile failed", http.StatusBadRequest, http.MethodGet, errData.Error())
 			return
 		default:
 			// Handle other unexpected errors
-			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodPatch, nil)
+			util.ErrorResponse(ctx, "Internal server error", http.StatusInternalServerError, http.MethodGet, nil)
 			return
 		}
 	}
@@ -51,5 +51,5 @@ func (h *handler) GetProfileHandler(ctx *gin.Context) {
 		"bio":         dataUser.Bio,
 	}
 
-	util.APIResponse(ctx, "Get user profile successfully", http.StatusOK, http.MethodPatch, responseData)
+	util.APIResponse(ctx, "Get user profile successfully", http.StatusOK, http.MethodGet, responseData)
 }

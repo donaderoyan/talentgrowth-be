@@ -29,4 +29,5 @@ func InitUserRoutes(db *mongo.Database, route *gin.Engine) {
 	userGroup.GET("/profile/:id", profileHandler.GetProfileHandler)
 	// musical information
 	userGroup.PATCH("/musicalinfo/:id", musicalInfoHandler.UpdateMusicalInfoHandler)
+	userGroup.POST("/musicalinfo/:id", musicalInfoHandler.CreateMusicalInfoHandler)
 }

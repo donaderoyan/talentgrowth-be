@@ -8,14 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type handler struct {
-	service musicalinfo.Service
-}
-
-func NewMusicalInfohandler(service musicalinfo.Service) *handler {
-	return &handler{service: service}
-}
-
 // Swagger documentation for UpdateMusicalInfoHandler
 // @Summary Update musical information (partial update)
 // @Description Update musical information for a user
