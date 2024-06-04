@@ -19,7 +19,7 @@ import (
 // @Success 200 {object} map[string]interface{} "Musical information updated successfully"
 // @Failure 400 {object} map[string]interface{} "Bad request"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
-// @Router /api/v1/user/musicalinfo/{id} [patch]
+// @Router /user/musicalinfo/{id} [patch]
 func (h *handler) UpdateMusicalInfoHandler(ctx *gin.Context) {
 	userID := ctx.Param("id")
 	var input musicalinfo.MusicalInfoInput

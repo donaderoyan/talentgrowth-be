@@ -28,7 +28,7 @@ func NewHandlerRegister(service register.Service) *handler {
 // @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
 // @Failure 409 {object} map[string]interface{} "Conflict, user already exists"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
-// @Router /api/v1/register [post]
+// @Router /register [post]
 func (h *handler) RegisterHandler(ctx *gin.Context) {
 	var input register.RegisterInput
 

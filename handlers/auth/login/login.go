@@ -27,7 +27,7 @@ func NewHandlerLogin(service login.Service) *handler {
 // @Failure 400 {object} map[string]interface{} "Bad request, invalid input"
 // @Failure 404 {object} map[string]interface{} "User not found"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
-// @Router /api/v1/login [post]
+// @Router /login [post]
 func (h *handler) LoginHandler(ctx *gin.Context) {
 	var input login.LoginInput
 

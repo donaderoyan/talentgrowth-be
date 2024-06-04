@@ -32,6 +32,9 @@ func main() {
 // @contact.email donaderoyan@gmail.com
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:7890
+// @BasePath /api/v1
 func SetupRouter() *gin.Engine {
 	mongo := config.ConnectMongoDB()
 	db := mongo.Database(util.GodotEnv("MONGO_DBNAME"))

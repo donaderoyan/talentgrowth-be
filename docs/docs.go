@@ -23,7 +23,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/login": {
+        "/login": {
             "post": {
                 "description": "Logs in a user by email and password",
                 "consumes": [
@@ -79,7 +79,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/register": {
+        "/register": {
             "post": {
                 "description": "Register a new user with email, password, first name, and last name",
                 "consumes": [
@@ -135,7 +135,61 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/user/musicalinfo/{id}": {
+        "/user/musicalinfo/{id}": {
+            "post": {
+                "description": "Create musical information for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create musical information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Musical information to create",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/musicalinfo.MusicalInfoInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Musical information created successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Update musical information for a user",
                 "consumes": [
@@ -191,7 +245,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/user/profile/{id}": {
+        "/user/profile/{id}": {
             "get": {
                 "description": "Get the profile of a user by their ID",
                 "consumes": [
@@ -365,6 +419,10 @@ const docTemplate = `{
         },
         "musicalinfo.MusicalInfoInput": {
             "type": "object",
+            "required": [
+                "primary_instrument",
+                "skill_level"
+            ],
             "properties": {
                 "favorite_artists": {
                     "type": "array",
@@ -498,8 +556,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "",
-	BasePath:         "",
+	Host:             "localhost:7890",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Talentgrowth API",
 	Description:      "This is the API documentation for Talentgrowth",

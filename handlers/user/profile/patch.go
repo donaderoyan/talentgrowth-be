@@ -20,7 +20,7 @@ import (
 // @Success 200 {object} map[string]interface{} "Profile updated successfully"
 // @Failure 400 {object} map[string]interface{} "Bad request"
 // @Failure 500 {object} map[string]interface{} "Internal server error"
-// @Router /api/v1/user/profile/{id} [patch]
+// @Router /user/profile/{id} [patch]
 func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 	userID := ctx.Param("id")
 	if userID == "" {

@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Swagger documentation for CreateMusicalInfoHandler
+// @Summary Create musical information
+// @Description Create musical information for a user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Param request body musicalinfo.MusicalInfoInput true "Musical information to create"
+// @Success 201 {object} map[string]interface{} "Musical information created successfully"
+// @Failure 400 {object} map[string]interface{} "Bad request"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /user/musicalinfo/{id} [post]
 func (h *handler) CreateMusicalInfoHandler(ctx *gin.Context) {
 	userID := ctx.Param("id")
 	var input musicalinfo.MusicalInfoInput
