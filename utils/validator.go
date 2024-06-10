@@ -97,3 +97,11 @@ func msgForTag(tag string, param any) string {
 	}
 	return ""
 }
+
+func InterfaceSliceToStringSlice(slice []interface{}) []string {
+	result := make([]string, len(slice))
+	for i, v := range slice {
+		result[i] = v.(string)
+	}
+	return result
+}

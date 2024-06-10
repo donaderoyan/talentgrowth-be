@@ -40,6 +40,14 @@ func (e *MusicalInfoCreateError) Error() string {
 	return fmt.Sprintf("Musical Information update error: %s - %s", e.Code, e.Message)
 }
 
+type GetMusicalInfoError struct {
+	*util.BaseError
+}
+
+func (e *GetMusicalInfoError) Error() string {
+	return fmt.Sprintf("Musical Information update error: %s - %s", e.Code, e.Message)
+}
+
 func (r *repository) CreateMusicalInfo(userID string, data bson.M) (*model.MusicalInfo, error) {
 	// Start a session for transaction
 	session, err := r.db.Client().StartSession()
@@ -143,7 +151,6 @@ func (r *repository) UpdateMusicalInfo(userID string, updates bson.M) (*model.Mu
 		// Insert musical information
 		_, errInsert := r.db.Collection("musicalinfo").UpdateOne(sc, bson.M{"userID": userIDPrimitive}, bson.M{"$set": updates})
 		if errInsert != nil {
-			fmt.Printf("INSERT MUSICAL INFORMATION ERRORR >>>>>>>>>>> %v", errInsert)
 			return &MusicalInfoUpdateError{util.NewBaseError("ADD_MUSICALINFO_ERROR", "Update musical information failed")}
 		}
 
@@ -162,4 +169,45 @@ func (r *repository) UpdateMusicalInfo(userID string, updates bson.M) (*model.Mu
 	}
 
 	return &updatedMusicalInfo, nil
+}
+
+func (r *repository) GetMusicalInfo(userID string) (*model.MusicalInfo, error) {
+	// Start a session for transaction
+	session, err := r.db.Client().StartSession()
+	if err != nil {
+		return nil, err
+	}
+	defer session.EndSession(context.Background())
+
+	// Convert userID to primitive.ObjectID
+	userIDPrimitive, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		return nil, &GetMusicalInfoError{util.NewBaseError("INVALID_USER_ID", "Invalid user ID format")}
+	}
+
+	var musicalinfo model.MusicalInfo
+
+	transactionErr := mongo.WithSession(context.Background(), session, func(sc mongo.SessionContext) error {
+		// Check if user exists and retrieve current user data
+		var existingUser model.User
+		err = r.db.Collection("users").FindOne(sc, bson.M{"_id": userIDPrimitive}).Decode(&existingUser)
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				return &GetMusicalInfoError{util.NewBaseError("USER_NOT_FOUND", "User not found")}
+			}
+			return err
+		}
+
+		err = r.db.Collection("musicalinfo").FindOne(context.Background(), bson.M{"userID": userIDPrimitive}).Decode(&musicalinfo)
+		if err != nil {
+			return &GetMusicalInfoError{util.NewBaseError("MUSICAL_INFO_RETRIEVE_ERROR", "Failed to retrieve updated musical information")}
+		}
+
+		return nil
+	})
+
+	if transactionErr != nil {
+		return nil, transactionErr
+	}
+	return &musicalinfo, nil
 }
