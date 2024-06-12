@@ -53,14 +53,15 @@ func (h *handler) PutProfileHandler(ctx *gin.Context) {
 	}
 
 	responseData := gin.H{
-		"firstName":   updatedUser.FirstName,
-		"lastName":    updatedUser.LastName,
-		"phone":       updatedUser.Phone,
-		"address":     updatedUser.Address,
-		"birthday":    updatedUser.Birthday,
-		"gender":      updatedUser.Gender,
-		"nationality": updatedUser.Nationality,
-		"bio":         updatedUser.Bio,
+		"firstName":      updatedUser.FirstName,
+		"lastName":       updatedUser.LastName,
+		"phone":          updatedUser.Phone,
+		"address":        updatedUser.Address,
+		"birthday":       updatedUser.Birthday,
+		"gender":         updatedUser.Gender,
+		"nationality":    updatedUser.Nationality,
+		"bio":            updatedUser.Bio,
+		"profilePicture": updatedUser.ProfilePicture,
 	}
 
 	util.APIResponse(ctx, "Profile updated successfully", http.StatusOK, http.MethodPut, responseData)

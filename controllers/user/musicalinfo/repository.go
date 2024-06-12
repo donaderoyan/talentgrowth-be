@@ -135,6 +135,7 @@ func (r *repository) UpdateMusicalInfo(userID string, updates bson.M) (*model.Mu
 	if err != nil {
 		return nil, &MusicalInfoUpdateError{util.NewBaseError("INVALID_USER_ID", "Invalid user ID format")}
 	}
+	var dataMusicalInfo model.MusicalInfo
 
 	transactionErr := mongo.WithSession(context.Background(), session, func(sc mongo.SessionContext) error {
 
@@ -148,8 +149,30 @@ func (r *repository) UpdateMusicalInfo(userID string, updates bson.M) (*model.Mu
 			return err
 		}
 
+		err = r.db.Collection("musicalinfo").FindOne(sc, bson.M{"userID": userIDPrimitive}).Decode(&dataMusicalInfo)
+		if err != nil {
+			return &MusicalInfoUpdateError{util.NewBaseError("MUSICAL_INFO_RETRIEVE_ERROR", "Failed to retrieve updated musical information")}
+		}
+
+		for key, value := range updates {
+			switch key {
+			case "skillLevel":
+				dataMusicalInfo.SkillLevel = value.(string)
+			case "primaryInstrument":
+				dataMusicalInfo.PrimaryInstrument = value.(string)
+			case "secondaryInstruments":
+				dataMusicalInfo.SecondaryInstruments = util.InterfaceSliceToStringSlice(value.([]interface{}))
+			case "genres":
+				dataMusicalInfo.Genres = util.InterfaceSliceToStringSlice(value.([]interface{}))
+			case "favoriteArtists":
+				dataMusicalInfo.FavoriteArtists = util.InterfaceSliceToStringSlice(value.([]interface{}))
+			case "learningGoals":
+				dataMusicalInfo.LearningGoals = util.InterfaceSliceToStringSlice(value.([]interface{}))
+			}
+		}
+
 		// Insert musical information
-		_, errInsert := r.db.Collection("musicalinfo").UpdateOne(sc, bson.M{"userID": userIDPrimitive}, bson.M{"$set": updates})
+		_, errInsert := r.db.Collection("musicalinfo").UpdateOne(sc, bson.M{"userID": userIDPrimitive}, bson.M{"$set": dataMusicalInfo})
 		if errInsert != nil {
 			return &MusicalInfoUpdateError{util.NewBaseError("ADD_MUSICALINFO_ERROR", "Update musical information failed")}
 		}
@@ -161,14 +184,7 @@ func (r *repository) UpdateMusicalInfo(userID string, updates bson.M) (*model.Mu
 		return nil, transactionErr
 	}
 
-	// Retrieve the updated MusicalInfo
-	var updatedMusicalInfo model.MusicalInfo
-	err = r.db.Collection("musicalinfo").FindOne(context.Background(), bson.M{"userID": userIDPrimitive}).Decode(&updatedMusicalInfo)
-	if err != nil {
-		return nil, &MusicalInfoUpdateError{util.NewBaseError("MUSICAL_INFO_RETRIEVE_ERROR", "Failed to retrieve updated musical information")}
-	}
-
-	return &updatedMusicalInfo, nil
+	return &dataMusicalInfo, nil
 }
 
 func (r *repository) GetMusicalInfo(userID string) (*model.MusicalInfo, error) {

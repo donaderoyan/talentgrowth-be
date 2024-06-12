@@ -30,26 +30,16 @@ func (h *handler) UpdateMusicalInfoHandler(ctx *gin.Context) {
 		return
 	}
 
-	secondaryInstrumentsSlice, ok := input["secondaryInstruments"].([]interface{})
-	if !ok {
-		secondaryInstrumentsSlice = nil
-	}
-	genresSlice, ok := input["genres"].([]interface{})
-	if !ok {
-		genresSlice = nil
-	}
-	favoriteArtistsSlice, ok := input["favoriteArtists"].([]interface{})
-	if !ok {
-		favoriteArtistsSlice = nil
-	}
-	learningGoalsSlice, ok := input["learningGoals"].([]interface{})
-	if !ok {
-		learningGoalsSlice = nil
-	}
+	skillLevel := util.GetStringFromMap(input, "skillLevel")
+	primaryInstrument := util.GetStringFromMap(input, "primaryInstrument")
+	secondaryInstrumentsSlice := util.GetSliceFromMap(input, "secondaryInstruments")
+	genresSlice := util.GetSliceFromMap(input, "genres")
+	favoriteArtistsSlice := util.GetSliceFromMap(input, "favoriteArtists")
+	learningGoalsSlice := util.GetSliceFromMap(input, "learningGoals")
 
 	validateInput := musicalinfo.MusicalInfoInput{
-		SkillLevel:           input["skillLevel"].(string),
-		PrimaryInstrument:    input["primaryInstrument"].(string),
+		SkillLevel:           skillLevel,
+		PrimaryInstrument:    primaryInstrument,
 		SecondaryInstruments: util.InterfaceSliceToStringSlice(secondaryInstrumentsSlice),
 		Genres:               util.InterfaceSliceToStringSlice(genresSlice),
 		FavoriteArtists:      util.InterfaceSliceToStringSlice(favoriteArtistsSlice),

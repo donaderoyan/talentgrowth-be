@@ -41,14 +41,15 @@ func (h *handler) GetProfileHandler(ctx *gin.Context) {
 
 	// masking data
 	responseData := gin.H{
-		"firstName":   dataUser.FirstName,
-		"lastName":    dataUser.LastName,
-		"phone":       dataUser.Phone,
-		"address":     dataUser.Address,
-		"birthday":    dataUser.Birthday,
-		"gender":      dataUser.Gender,
-		"nationality": dataUser.Nationality,
-		"bio":         dataUser.Bio,
+		"firstName":      dataUser.FirstName,
+		"lastName":       dataUser.LastName,
+		"phone":          dataUser.Phone,
+		"address":        dataUser.Address,
+		"birthday":       dataUser.Birthday,
+		"gender":         dataUser.Gender,
+		"nationality":    dataUser.Nationality,
+		"bio":            dataUser.Bio,
+		"profilePicture": dataUser.ProfilePicture,
 	}
 
 	util.APIResponse(ctx, "Get user profile successfully", http.StatusOK, http.MethodGet, responseData)

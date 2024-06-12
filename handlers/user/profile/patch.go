@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 
 	profile "github.com/donaderoyan/talentgrowth-be/controllers/user/profile"
 	util "github.com/donaderoyan/talentgrowth-be/utils"
@@ -27,19 +28,45 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPut, "ID is required")
 		return
 	}
-	var input profile.UpdateProfileInput
+	var input bson.M
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		util.ErrorResponse(ctx, "Update profile failed", http.StatusBadRequest, http.MethodPatch, err.Error())
 		return
 	}
 
-	if errValidator := util.Validator(input, "updateValidation"); errValidator != nil {
+	var addressMap bson.M
+	var validateAddress profile.Address
+	if address, ok := input["address"]; ok {
+		addressMap, _ = address.(map[string]interface{})
+
+		validateAddress = profile.Address{
+			Street:     util.GetStringFromMap(addressMap, "street"),
+			City:       util.GetStringFromMap(addressMap, "city"),
+			State:      util.GetStringFromMap(addressMap, "state"),
+			Country:    util.GetStringFromMap(addressMap, "country"),
+			PostalCode: util.GetStringFromMap(addressMap, "postalCode"),
+		}
+	}
+
+	validateInput := profile.UpdateProfileInput{
+		FirstName:      util.GetStringFromMap(input, "firstName"),
+		LastName:       util.GetStringFromMap(input, "lastName"),
+		Phone:          util.GetStringFromMap(input, "phone"),
+		Birthday:       util.GetStringFromMap(input, "birthday"),
+		Gender:         util.GetStringFromMap(input, "gender"),
+		Nationality:    util.GetStringFromMap(input, "nationality"),
+		Bio:            util.GetStringFromMap(input, "bio"),
+		ProfilePicture: util.GetStringFromMap(input, "profilePicture"),
+		Address:        validateAddress,
+	}
+
+	if errValidator := util.Validator(validateInput, "updateValidation"); errValidator != nil {
 		util.ErrorResponse(ctx, "The input value is invalid", http.StatusBadRequest, http.MethodPatch, errValidator.Error())
 		return
 	}
 
-	updatedUser, errUpdate := h.service.UpdateProfileService(userID, &input)
+	updatedUser, errUpdate := h.service.PatchProfileService(userID, input)
 	if errUpdate != nil {
 		switch errUpdate.(type) {
 		case *profile.UserProfileUpdateError:
@@ -53,14 +80,15 @@ func (h *handler) UpdateProfileHandler(ctx *gin.Context) {
 	}
 
 	responseData := gin.H{
-		"firstName":   updatedUser.FirstName,
-		"lastName":    updatedUser.LastName,
-		"phone":       updatedUser.Phone,
-		"address":     updatedUser.Address,
-		"birthday":    updatedUser.Birthday,
-		"gender":      updatedUser.Gender,
-		"nationality": updatedUser.Nationality,
-		"bio":         updatedUser.Bio,
+		"firstName":      updatedUser.FirstName,
+		"lastName":       updatedUser.LastName,
+		"phone":          updatedUser.Phone,
+		"address":        updatedUser.Address,
+		"birthday":       updatedUser.Birthday,
+		"gender":         updatedUser.Gender,
+		"nationality":    updatedUser.Nationality,
+		"bio":            updatedUser.Bio,
+		"profilePicture": updatedUser.ProfilePicture,
 	}
 
 	util.APIResponse(ctx, "Profile updated successfully", http.StatusOK, http.MethodPatch, responseData)

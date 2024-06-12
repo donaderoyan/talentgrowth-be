@@ -13,7 +13,7 @@ definitions:
     type: object
   musicalinfo.MusicalInfoInput:
     properties:
-      favorite_artists:
+      favoriteArtists:
         items:
           type: string
         type: array
@@ -21,25 +21,26 @@ definitions:
         items:
           type: string
         type: array
-      learning_goals:
+      learningGoals:
         items:
           type: string
         type: array
-      primary_instrument:
+      primaryInstrument:
         type: string
-      secondary_instruments:
+      secondaryInstruments:
         items:
           type: string
         type: array
-      skill_level:
+      skillLevel:
         type: string
     required:
-    - primary_instrument
-    - skill_level
+    - primaryInstrument
+    - skillLevel
     type: object
   profile.Address:
     properties:
       city:
+        minLength: 3
         type: string
       country:
         type: string
@@ -48,6 +49,7 @@ definitions:
       state:
         type: string
       street:
+        minLength: 3
         type: string
     required:
     - city

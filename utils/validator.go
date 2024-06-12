@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 // Validator function to validate struct fields based on tags
@@ -104,4 +105,28 @@ func InterfaceSliceToStringSlice(slice []interface{}) []string {
 		result[i] = v.(string)
 	}
 	return result
+}
+
+func GetStringFromMap(input bson.M, key string) string {
+	value, ok := input[key]
+	if !ok {
+		return ""
+	}
+	str, ok := value.(string)
+	if !ok {
+		return ""
+	}
+	return str
+}
+
+func GetSliceFromMap(input bson.M, key string) []interface{} {
+	value, ok := input[key]
+	if !ok {
+		return nil
+	}
+	slice, ok := value.(bson.A)
+	if !ok {
+		return nil
+	}
+	return slice
 }

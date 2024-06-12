@@ -420,11 +420,11 @@ const docTemplate = `{
         "musicalinfo.MusicalInfoInput": {
             "type": "object",
             "required": [
-                "primary_instrument",
-                "skill_level"
+                "primaryInstrument",
+                "skillLevel"
             ],
             "properties": {
-                "favorite_artists": {
+                "favoriteArtists": {
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -436,22 +436,22 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
-                "learning_goals": {
+                "learningGoals": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "primary_instrument": {
+                "primaryInstrument": {
                     "type": "string"
                 },
-                "secondary_instruments": {
+                "secondaryInstruments": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "skill_level": {
+                "skillLevel": {
                     "type": "string"
                 }
             }
@@ -466,7 +466,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "city": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 3
                 },
                 "country": {
                     "type": "string"
@@ -478,7 +479,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "street": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 3
                 }
             }
         },
